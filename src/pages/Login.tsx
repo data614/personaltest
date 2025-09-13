@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useNavigate, Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 
@@ -46,9 +46,6 @@ const Login = () => {
         {error && <p className="text-sm text-red-500">{error}</p>}
         <Button type="submit" className="w-full">
           Login
-        </Button>
-        <Button variant="link" asChild>
-          <Link to="/signup">Create account</Link>
         </Button>
       </form>
     </div>
