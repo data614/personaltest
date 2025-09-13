@@ -1,19 +1,10 @@
 import express from 'express';
 import cors from 'cors';
-import BetterSqlite3 from 'better-sqlite3';
-import bcrypt from 'bcryptjs';
-import jwt from 'jsonwebtoken';
 import nodemailer from 'nodemailer';
 
 const app = express();
 app.use(cors());
 app.use(express.json());
-
-// database setup
-const db = new BetterSqlite3(process.env.DATABASE_URL || './data.sqlite');
-db.prepare(
-  'CREATE TABLE IF NOT EXISTS users (id INTEGER PRIMARY KEY AUTOINCREMENT, email TEXT UNIQUE, password TEXT)'
-).run();
 
 // email transporter
 const transporter = nodemailer.createTransport({
@@ -24,17 +15,6 @@ const transporter = nodemailer.createTransport({
     user: process.env.EMAIL_SMTP_USER,
     pass: process.env.EMAIL_SMTP_PASS,
   },
-});
-
-app.post('/api/login', async (req, res) => {
-  const { email, password } = req.body;
-  if (!email || !password) return res.status(400).json({ message: 'Email and password required' });
-  const user = db.prepare('SELECT * FROM users WHERE email = ?').get(email);
-  if (!user) return res.status(401).json({ message: 'Invalid credentials' });
-  const ok = await bcrypt.compare(password, user.password);
-  if (!ok) return res.status(401).json({ message: 'Invalid credentials' });
-  const token = jwt.sign({ id: user.id, email: user.email }, process.env.JWT_SECRET || 'secret', { expiresIn: '1h' });
-  res.json({ token });
 });
 
 app.post('/api/contact', async (req, res) => {
