@@ -327,6 +327,11 @@ const CareerExplorerDisplay: React.FC<{ paths: string[] }> = ({ paths }) => {
     const [nodeDescription, setNodeDescription] = useState<string | null>(null);
     const [loadingDescription, setLoadingDescription] = useState<boolean>(false);
     const [descriptionError, setDescriptionError] = useState<string | null>(null);
+    const [apiKey, setApiKey] = useState('');
+
+    useEffect(() => {
+        fetch('/api/ai-key').then(r => r.json()).then(d => setApiKey(d.key));
+    }, []);
 
     const nodePositions = useMemo<NodePosition[]>(() => {
         const positions: NodePosition[] = [];
@@ -372,7 +377,6 @@ const CareerExplorerDisplay: React.FC<{ paths: string[] }> = ({ paths }) => {
       setNodeDescription(null);
       setDescriptionError(null);
 
-      const apiKey = import.meta.env.VITE_API_KEY;
       if (!apiKey) {
           setDescriptionError("API key is not configured.");
           setLoadingDescription(false);
@@ -468,6 +472,13 @@ export default function Planner() {
   const [loading, setLoading] = useState({ plan: false, explorer: false });
   const [error, setError] = useState<string | null>(null);
   const [view, setView] = useState<View>('planner');
+  const [apiKey, setApiKey] = useState('');
+
+  useEffect(() => {
+    fetch('/api/ai-key')
+      .then(r => r.json())
+      .then(d => setApiKey(d.key));
+  }, []);
 
   const isLoading = loading.plan || loading.explorer;
 
@@ -483,7 +494,6 @@ export default function Planner() {
     setExploredPaths([]);
     setView('planner');
 
-    const apiKey = import.meta.env.VITE_API_KEY;
     if (!apiKey) {
         setError("API key is not configured. Please contact support.");
         setLoading(prev => ({ ...prev, plan: false }));
@@ -526,7 +536,6 @@ export default function Planner() {
     setCareerPlan(null);
     setExploredPaths([]);
 
-    const apiKey = import.meta.env.VITE_API_KEY;
     if (!apiKey) {
         setError("API key is not configured. Please contact support.");
         setLoading(prev => ({ ...prev, explorer: false }));
