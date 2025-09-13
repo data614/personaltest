@@ -32,8 +32,15 @@ cd <YOUR_PROJECT_NAME>
 # Step 3: Install the necessary dependencies.
 npm i
 
-# Step 4: Start the development server with auto-reloading and an instant preview.
+# Step 4: Copy environment variables
+cp .env.example .env
+# Fill in the values for database, JWT secret, AI key and email SMTP settings
+
+# Step 5: Start the frontend
 npm run dev
+
+# Step 6: Start the backend API
+npm run server
 ```
 
 **Edit a file directly in GitHub**
