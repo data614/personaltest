@@ -26,34 +26,6 @@ const transporter = nodemailer.createTransport({
   },
 });
 
-function sendWelcomeEmail(email: string) {
-  return transporter.sendMail({
-    from: process.env.EMAIL_SMTP_USER,
-    to: email,
-    subject: 'Welcome to PersonaPath AI',
-    text: 'Thank you for signing up!',
-  });
-}
-
-app.post('/api/signup', async (req, res) => {
-  const { email, password } = req.body;
-  if (!email || !password) return res.status(400).json({ message: 'Email and password required' });
-  try {
-    const hash = await bcrypt.hash(password, 10);
-    const stmt = db.prepare('INSERT INTO users (email, password) VALUES (?, ?)');
-    stmt.run(email, hash);
-    await sendWelcomeEmail(email).catch(() => {});
-    res.json({ message: 'User created' });
-  } catch (err: unknown) {
-    const error = err as { code?: string };
-    if (error.code === 'SQLITE_CONSTRAINT_UNIQUE') {
-      res.status(409).json({ message: 'User already exists' });
-    } else {
-      res.status(500).json({ message: 'Server error' });
-    }
-  }
-});
-
 app.post('/api/login', async (req, res) => {
   const { email, password } = req.body;
   if (!email || !password) return res.status(400).json({ message: 'Email and password required' });
