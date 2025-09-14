@@ -19,7 +19,7 @@ const HeroSection = () => {
         <div className="max-w-4xl mx-auto space-y-8">
           {/* Badge */}
           <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-brand-primary/10 border border-brand-primary/20 text-brand-primary">
-            <Sparkles className="w-4 h-4" />
+            <Sparkles className="w-4 h-4" aria-hidden="true" />
             <span className="text-sm font-medium">AI-Powered Career Intelligence</span>
           </div>
           
@@ -41,13 +41,13 @@ const HeroSection = () => {
           {/* CTA Buttons */}
           <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
             <Button variant="hero" size="lg" className="text-lg px-8 py-6" asChild>
-              <Link to="/planner">
+              <Link to="/signup" aria-label="Start Your Journey">
                 Start Your Journey
-                <ArrowRight className="w-5 h-5" />
+                <ArrowRight className="w-5 h-5" aria-hidden="true" />
               </Link>
             </Button>
-            <Button variant="outline" size="lg" className="text-lg px-8 py-6">
-              Watch Demo
+            <Button variant="outline" size="lg" className="text-lg px-8 py-6" asChild>
+              <Link to="/demo" aria-label="Watch Demo">Watch Demo</Link>
             </Button>
           </div>
           
