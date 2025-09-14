@@ -1,63 +1,62 @@
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Map, Layers, Bot, BarChart3, Plug } from "lucide-react";
 import { Link } from "react-router-dom";
-
-const features = [
-  {
-    icon: Map,
-    title: "Personalized Roadmaps",
-    description: "Tailored career paths to help you reach your unique goals.",
-    link: "/planner#roadmaps",
-    iconAlt: "Roadmap icon"
-  },
-  {
-    icon: Layers,
-    title: "Adaptive Learning Paths",
-    description: "Dynamic learning modules that adjust to your progress.",
-    link: "/planner#learning",
-    iconAlt: "Layered learning icon"
-  },
-  {
-    icon: Bot,
-    title: "Real-Time AI Coaching",
-    description: "Instant guidance and feedback powered by AI.",
-    link: "/planner#coaching",
-    iconAlt: "AI coaching icon"
-  },
-  {
-    icon: BarChart3,
-    title: "Progress Analytics",
-    description: "Track your growth with intuitive analytics.",
-    link: "/planner#analytics",
-    iconAlt: "Analytics icon"
-  },
-  {
-    icon: Plug,
-    title: "Seamless Integrations",
-    description: "Connect with your favorite tools and platforms effortlessly.",
-    link: "/planner#integrations",
-    iconAlt: "Integration plug icon"
-  }
-];
+import { useI18n } from "@/lib/i18n";
 
 const FeaturesSection = () => {
+  const { t } = useI18n();
+  const features = [
+    {
+      icon: Map,
+      title: t("Personalized Roadmaps"),
+      description: t("Tailored career paths to help you reach your unique goals."),
+      link: "/planner#roadmaps",
+      iconAlt: t("Roadmap icon"),
+    },
+    {
+      icon: Layers,
+      title: t("Adaptive Learning Paths"),
+      description: t("Dynamic learning modules that adjust to your progress."),
+      link: "/planner#learning",
+      iconAlt: t("Layered learning icon"),
+    },
+    {
+      icon: Bot,
+      title: t("Real-Time AI Coaching"),
+      description: t("Instant guidance and feedback powered by AI."),
+      link: "/planner#coaching",
+      iconAlt: t("AI coaching icon"),
+    },
+    {
+      icon: BarChart3,
+      title: t("Progress Analytics"),
+      description: t("Track your growth with intuitive analytics."),
+      link: "/planner#analytics",
+      iconAlt: t("Analytics icon"),
+    },
+    {
+      icon: Plug,
+      title: t("Seamless Integrations"),
+      description: t("Connect with your favorite tools and platforms effortlessly."),
+      link: "/planner#integrations",
+      iconAlt: t("Integration plug icon"),
+    },
+  ];
+
   return (
     <section className="py-24 bg-gradient-to-b from-background to-muted/30">
       <div className="container mx-auto px-4">
         <div className="text-center mb-16">
           <h2 className="text-4xl md:text-5xl font-bold mb-4">
-            Why Choose{" "}
-            <span className="bg-gradient-to-r from-brand-primary to-brand-secondary bg-clip-text text-transparent">
-              PersonaPath AI
-            </span>
+            {t("Why Choose PersonaPath AI")}
           </h2>
           <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
-            Experience the future of career guidance with our comprehensive AI-driven platform
+            {t("Experience the future of career guidance with our comprehensive AI-driven platform")}
           </p>
         </div>
-        
+
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {features.map((feature, index) => (
+          {features.map((feature) => (
             <Link
               key={feature.link}
               to={feature.link}
