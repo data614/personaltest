@@ -1,36 +1,42 @@
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Brain, Target, TrendingUp, Users, Zap, Shield } from "lucide-react";
+import { Map, Layers, Bot, BarChart3, Plug } from "lucide-react";
+import { Link } from "react-router-dom";
 
 const features = [
   {
-    icon: Brain,
-    title: "AI-Powered Assessment",
-    description: "Our sophisticated AI analyzes your personality, skills, and goals to create a comprehensive profile."
-  },
-  {
-    icon: Target,
+    icon: Map,
     title: "Personalized Roadmaps",
-    description: "Get step-by-step action plans tailored specifically to your unique career aspirations and learning style."
+    description: "Tailored career paths to help you reach your unique goals.",
+    link: "/planner#roadmaps",
+    iconAlt: "Roadmap icon"
   },
   {
-    icon: TrendingUp,
-    title: "Dynamic Adaptation",
-    description: "Your roadmap evolves as you grow, ensuring recommendations stay relevant to your changing goals."
+    icon: Layers,
+    title: "Adaptive Learning Paths",
+    description: "Dynamic learning modules that adjust to your progress.",
+    link: "/planner#learning",
+    iconAlt: "Layered learning icon"
   },
   {
-    icon: Users,
-    title: "Expert-Backed Insights",
-    description: "Built on frameworks used by top career counselors and validated by industry professionals."
+    icon: Bot,
+    title: "Real-Time AI Coaching",
+    description: "Instant guidance and feedback powered by AI.",
+    link: "/planner#coaching",
+    iconAlt: "AI coaching icon"
   },
   {
-    icon: Zap,
-    title: "Instant Guidance",
-    description: "Get immediate answers to career questions and personalized advice whenever you need it."
+    icon: BarChart3,
+    title: "Progress Analytics",
+    description: "Track your growth with intuitive analytics.",
+    link: "/planner#analytics",
+    iconAlt: "Analytics icon"
   },
   {
-    icon: Shield,
-    title: "Privacy-First Approach",
-    description: "Your personal data and career information are protected with enterprise-grade security."
+    icon: Plug,
+    title: "Seamless Integrations",
+    description: "Connect with your favorite tools and platforms effortlessly.",
+    link: "/planner#integrations",
+    iconAlt: "Integration plug icon"
   }
 ];
 
@@ -52,21 +58,29 @@ const FeaturesSection = () => {
         
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           {features.map((feature, index) => (
-            <Card key={index} className="group hover:shadow-lg hover:shadow-brand-primary/10 transition-all duration-300 border-border/50 hover:border-brand-primary/30">
-              <CardHeader>
-                <div className="w-12 h-12 rounded-lg bg-gradient-to-r from-brand-primary to-brand-secondary p-2.5 mb-4 group-hover:scale-110 transition-transform duration-300">
-                  <feature.icon className="w-full h-full text-white" />
-                </div>
-                <CardTitle className="text-xl font-semibold group-hover:text-brand-primary transition-colors">
-                  {feature.title}
-                </CardTitle>
-              </CardHeader>
-              <CardContent>
-                <CardDescription className="text-base leading-relaxed">
-                  {feature.description}
-                </CardDescription>
-              </CardContent>
-            </Card>
+            <Link
+              key={index}
+              to={feature.link}
+              className="group block hover:shadow-lg hover:shadow-brand-primary/10 transition-all duration-300 rounded-lg"
+              aria-label={feature.title}
+            >
+              <Card className="h-full border-border/50 group-hover:border-brand-primary/30">
+                <CardHeader>
+                  <div className="w-12 h-12 rounded-lg bg-gradient-to-r from-brand-primary to-brand-secondary p-2.5 mb-4 group-hover:scale-110 transition-transform duration-300">
+                    <feature.icon className="w-full h-full text-white" aria-hidden="true" />
+                    <span className="sr-only">{feature.iconAlt}</span>
+                  </div>
+                  <CardTitle className="text-xl font-semibold group-hover:text-brand-primary transition-colors">
+                    {feature.title}
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <CardDescription className="text-base leading-relaxed">
+                    {feature.description}
+                  </CardDescription>
+                </CardContent>
+              </Card>
+            </Link>
           ))}
         </div>
       </div>
