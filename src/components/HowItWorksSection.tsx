@@ -47,7 +47,7 @@ const HowItWorksSection = () => (
       <div className="grid gap-12 md:grid-cols-4">
         {steps.map((step, index) => (
           <Link
-            key={index}
+            key={step.link}
             to={step.link}
             className="group text-center space-y-4"
             aria-label={step.title}
