@@ -50,7 +50,7 @@ const Header = () => {
               className="bg-transparent border rounded px-2 py-1"
               value={lang}
               onChange={(e: React.ChangeEvent<HTMLSelectElement>) => setLang(e.target.value as Lang)}
-              aria-label="Language selector"
+              aria-label={t("Language selector")}
             >
               <option value="en">EN</option>
               <option value="zh">中文</option>
