@@ -1,4 +1,5 @@
 import React, { useState, useCallback, useMemo, useEffect } from 'react';
+import { useI18n } from '@/lib/i18n';
 import { GoogleGenAI, Type } from "@google/genai";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
@@ -109,40 +110,44 @@ const RoadmapStepItem: React.FC<{
   onToggle: () => void;
   isComplete: boolean;
   onToggleComplete: () => void;
-}> = ({ step, isLast, isOpen, onToggle, isComplete, onToggleComplete }) => (
-  <div className={`relative pl-10 rounded-lg -my-2 py-2 transition-all duration-300 ${isComplete ? 'bg-green-500/10' : ''}`}>
-    <div
-      onClick={(e) => { e.stopPropagation(); onToggleComplete(); }}
-      aria-label={isComplete ? 'Mark step as incomplete' : 'Mark step as complete'}
-      role="button"
-      className={`absolute left-0 top-3 flex items-center justify-center w-5 h-5 rounded-full ring-4 ring-slate-900 transition-colors duration-300 cursor-pointer ${
-        isComplete ? 'bg-green-500' : (isOpen ? 'bg-violet-500' : 'bg-slate-700 hover:bg-violet-600')
-      }`}
-    >
-      {isComplete && <CheckIcon className="w-3.5 h-3.5 text-slate-900" />}
-    </div>
-    {!isLast && <div className={`absolute left-[9px] top-8 w-0.5 h-full transition-colors duration-300 ${isComplete ? 'bg-green-500' : 'bg-slate-800'}`}></div>}
-    
-    <div 
-      className="flex justify-between items-center cursor-pointer group" 
-      onClick={onToggle}
-      aria-expanded={isOpen}
-      role="button"
-    >
-      <h4 className={`font-semibold pr-2 transition-all ${isComplete ? 'text-slate-500 line-through' : 'text-slate-200 group-hover:text-white'}`}>{step.title}</h4>
-      <ChevronDownIcon className={`w-5 h-5 text-slate-500 transition-transform duration-300 ${isOpen ? 'rotate-180' : ''}`} />
-    </div>
+}> = ({ step, isLast, isOpen, onToggle, isComplete, onToggleComplete }) => {
+  const { t } = useI18n();
+  return (
+    <div className={`relative pl-10 rounded-lg -my-2 py-2 transition-all duration-300 ${isComplete ? 'bg-green-500/10' : ''}`}>
+      <div
+        onClick={(e) => { e.stopPropagation(); onToggleComplete(); }}
+        aria-label={isComplete ? t('Mark step as incomplete') : t('Mark step as complete')}
+        role="button"
+        className={`absolute left-0 top-3 flex items-center justify-center w-5 h-5 rounded-full ring-4 ring-slate-900 transition-colors duration-300 cursor-pointer ${
+          isComplete ? 'bg-green-500' : (isOpen ? 'bg-violet-500' : 'bg-slate-700 hover:bg-violet-600')
+        }`}
+      >
+        {isComplete && <CheckIcon className="w-3.5 h-3.5 text-slate-900" />}
+      </div>
+      {!isLast && <div className={`absolute left-[9px] top-8 w-0.5 h-full transition-colors duration-300 ${isComplete ? 'bg-green-500' : 'bg-slate-800'}`}></div>}
 
-    <div className={`grid transition-all duration-300 ease-out ${isOpen ? 'grid-rows-[1fr] opacity-100' : 'grid-rows-[0fr] opacity-0'}`}>
-      <div className="overflow-hidden">
-        <p className={`text-slate-400 mt-2 text-sm pr-4 transition-transform duration-200 ease-out ${isOpen ? 'translate-y-0 delay-100' : '-translate-y-2'}`}>
-          {step.description}
-        </p>
+      <div
+        className="flex justify-between items-center cursor-pointer group"
+        onClick={onToggle}
+        aria-expanded={isOpen}
+        role="button"
+      >
+        <h4 className={`font-semibold pr-2 transition-all ${isComplete ? 'text-slate-500 line-through' : 'text-slate-200 group-hover:text-white'}`}>{step.title}</h4>
+        <ChevronDownIcon className={`w-5 h-5 text-slate-500 transition-transform duration-300 ${isOpen ? 'rotate-180' : ''}`} />
+      </div>
+
+      <div className={`grid transition-all duration-300 ease-out ${isOpen ? 'grid-rows-[1fr] opacity-100' : 'grid-rows-[0fr] opacity-0'}`}>
+        <div className="overflow-hidden">
+          <p className={`text-slate-400 mt-2 text-sm pr-4 transition-transform duration-200 ease-out ${isOpen ? 'translate-y-0 delay-100' : '-translate-y-2'}`}>
+            {step.description}
+          </p>
+        </div>
       </div>
     </div>
-  </div>
-);
+  );
+};
 const CareerPathCard: React.FC<{ path: CareerPath; index: number }> = ({ path, index }) => {
+  const { t } = useI18n();
   const [openStepIndex, setOpenStepIndex] = useState<number | null>(0);
   
   const storageKey = useMemo(() => `personaPath-progress-${path.title.replace(/\s+/g, '-')}`, [path.title]);
@@ -196,12 +201,12 @@ const CareerPathCard: React.FC<{ path: CareerPath; index: number }> = ({ path, i
       <p className="mt-4 text-slate-300">{path.description}</p>
 
       <div className="mt-6">
-        <h4 className="text-lg font-semibold text-white mb-3">Required Skills</h4>
+        <h4 className="text-lg font-semibold text-white mb-3">{t('Required Skills')}</h4>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-y-6 gap-x-8">
           <div>
             <div className="flex items-center gap-2 mb-3">
               <CodeIcon className="w-5 h-5 text-slate-400" />
-              <h5 className="font-semibold text-slate-300">Technical Skills</h5>
+              <h5 className="font-semibold text-slate-300">{t('Technical Skills')}</h5>
             </div>
             <div className="flex flex-wrap gap-2">
               {path.skills.technical.map(skill => <SkillChip key={skill} skill={skill} />)}
@@ -210,7 +215,7 @@ const CareerPathCard: React.FC<{ path: CareerPath; index: number }> = ({ path, i
           <div>
             <div className="flex items-center gap-2 mb-3">
               <UsersIcon className="w-5 h-5 text-slate-400" />
-              <h5 className="font-semibold text-slate-300">Soft Skills</h5>
+              <h5 className="font-semibold text-slate-300">{t('Soft Skills')}</h5>
             </div>
             <div className="flex flex-wrap gap-2">
               {path.skills.soft.map(skill => <SkillChip key={skill} skill={skill} />)}
@@ -221,8 +226,8 @@ const CareerPathCard: React.FC<{ path: CareerPath; index: number }> = ({ path, i
 
       <div className="mt-8">
         <div className="flex justify-between items-center mb-2">
-          <h4 className="text-lg font-semibold text-white">Your Roadmap</h4>
-          <p className="text-sm font-medium text-slate-300">{`${completedSteps.size} / ${path.roadmap.length} Completed`}</p>
+          <h4 className="text-lg font-semibold text-white">{t('Your Roadmap')}</h4>
+          <p className="text-sm font-medium text-slate-300">{`${completedSteps.size} / ${path.roadmap.length} ${t('Completed')}`}</p>
         </div>
         <div className="w-full bg-slate-800 rounded-full h-2.5 mb-5">
             <div
@@ -300,7 +305,7 @@ const CareerDetailModal: React.FC<{
             <button 
                 onClick={onClose}
                 className="absolute top-4 right-4 text-slate-500 hover:text-white transition-colors"
-                aria-label="Close career detail view"
+                aria-label={t('Close career detail view')}
             >
                 <CloseIcon className="w-6 h-6" />
             </button>
@@ -378,7 +383,7 @@ const CareerExplorerDisplay: React.FC<{ paths: string[] }> = ({ paths }) => {
       setDescriptionError(null);
 
       if (!apiKey) {
-          setDescriptionError("API key is not configured.");
+          setDescriptionError(t('API key is not configured. Please contact support.'));
           setLoadingDescription(false);
           return;
       }
@@ -396,7 +401,7 @@ const CareerExplorerDisplay: React.FC<{ paths: string[] }> = ({ paths }) => {
 
       } catch (err) {
         console.error("Failed to fetch description:", err);
-        setDescriptionError("Could not fetch career details. Please try again.");
+        setDescriptionError(t('Could not fetch career details. Please try again.'));
       } finally {
         setLoadingDescription(false);
       }
@@ -423,7 +428,7 @@ const CareerExplorerDisplay: React.FC<{ paths: string[] }> = ({ paths }) => {
                 ))}
             </div>
             <div className="absolute bottom-4 left-1/2 -translate-x-1/2 bg-slate-900/50 backdrop-blur-sm px-4 py-2 rounded-full text-sm text-slate-400 border border-slate-700">
-                Click on a path to learn more
+                {t('Click on a path to learn more')}
             </div>
             {selectedNode && (
                 <CareerDetailModal 
@@ -438,18 +443,21 @@ const CareerExplorerDisplay: React.FC<{ paths: string[] }> = ({ paths }) => {
     );
 };
 
-const LoadingSpinner: React.FC<{ text?: string }> = ({ text = "Crafting Your Future..." }) => (
+const LoadingSpinner: React.FC<{ text?: string }> = ({ text }) => {
+  const { t } = useI18n();
+  return (
     <div className="flex flex-col items-center justify-center text-center py-20 animate-fade-in">
-        <div className="relative w-24 h-24">
-            <div className="absolute inset-0 border-4 border-slate-800 rounded-full"></div>
-            <div className="absolute inset-0 border-4 border-t-violet-500 rounded-full animate-spin"></div>
-        </div>
-        <div className="mt-6 space-y-2">
-            <h3 className="text-xl font-semibold text-white">{text}</h3>
-            <p className="text-slate-400 max-w-sm md:max-w-md">Our AI is analyzing your profile. This might take a moment.</p>
-        </div>
+      <div className="relative w-24 h-24">
+        <div className="absolute inset-0 border-4 border-slate-800 rounded-full"></div>
+        <div className="absolute inset-0 border-4 border-t-violet-500 rounded-full animate-spin"></div>
+      </div>
+      <div className="mt-6 space-y-2">
+        <h3 className="text-xl font-semibold text-white">{text || t('Crafting Your Future...')}</h3>
+        <p className="text-slate-400 max-w-sm md:max-w-md">{t('Generating Your Detailed Plan...')}</p>
+      </div>
     </div>
-);
+  );
+};
 
 const ErrorDisplay: React.FC<{ message: string }> = ({ message }) => (
     <div className="mt-12 p-4 bg-red-900/50 border border-red-700 rounded-lg text-center animate-fade-in">
@@ -463,6 +471,7 @@ const ErrorDisplay: React.FC<{ message: string }> = ({ message }) => (
 // =================================================================================
 
 export default function Planner() {
+  const { t } = useI18n();
   const [skills, setSkills] = useState('React, TypeScript, Node.js');
   const [interests, setInterests] = useState('Building scalable web applications, UI/UX design, and artificial intelligence.');
   const [goals, setGoals] = useState('Find a senior frontend role with leadership opportunities and a healthy work-life balance.');
@@ -484,7 +493,7 @@ export default function Planner() {
 
   const handleGeneratePlan = useCallback(async () => {
     if (!skills || !interests || !goals) {
-      setError("Please fill out all fields to generate your career plan.");
+      setError(t('Please fill out all fields to generate your career plan.'));
       return;
     }
     
@@ -495,7 +504,7 @@ export default function Planner() {
     setView('planner');
 
     if (!apiKey) {
-        setError("API key is not configured. Please contact support.");
+        setError(t('API key is not configured. Please contact support.'));
         setLoading(prev => ({ ...prev, plan: false }));
         return;
     }
@@ -519,7 +528,7 @@ export default function Planner() {
 
     } catch (err) {
       console.error(err);
-      setError("Failed to generate career plan. The AI may be overloaded. Please try again later.");
+      setError(t('Failed to generate career plan. The AI may be overloaded. Please try again later.'));
     } finally {
       setLoading(prev => ({ ...prev, plan: false }));
     }
@@ -527,7 +536,7 @@ export default function Planner() {
 
   const handleExplorePaths = useCallback(async () => {
     if (!skills || !interests || !goals) {
-      setError("Please fill out all fields to explore career paths.");
+      setError(t('Please fill out all fields to explore career paths.'));
       return;
     }
     
@@ -537,7 +546,7 @@ export default function Planner() {
     setExploredPaths([]);
 
     if (!apiKey) {
-        setError("API key is not configured. Please contact support.");
+        setError(t('API key is not configured. Please contact support.'));
         setLoading(prev => ({ ...prev, explorer: false }));
         return;
     }
@@ -562,7 +571,7 @@ export default function Planner() {
 
     } catch (err) {
       console.error(err);
-      setError("Failed to explore career paths. The AI may be overloaded. Please try again later.");
+      setError(t('Failed to explore career paths. The AI may be overloaded. Please try again later.'));
     } finally {
       setLoading(prev => ({ ...prev, explorer: false }));
     }
@@ -597,7 +606,7 @@ export default function Planner() {
                     id="skills"
                     value={skills}
                     onChange={(e) => setSkills(e.target.value)}
-                    placeholder="e.g., List technical skills like 'JavaScript, React, Figma' or soft skills like 'Public Speaking, Team Leadership'. More detail is better!"
+                    placeholder={t("e.g., List technical skills like 'JavaScript, React, Figma' or soft skills like 'Public Speaking, Team Leadership'. More detail is better!")}
                     className="w-full h-28 bg-slate-900 border border-slate-700 rounded-lg p-3 text-slate-200 placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-violet-500 focus:border-violet-500 transition"
                     disabled={isLoading}
                     />
@@ -609,7 +618,7 @@ export default function Planner() {
                     id="interests"
                     value={interests}
                     onChange={(e) => setInterests(e.target.value)}
-                    placeholder="e.g., 'I love building beautiful user interfaces', 'I'm fascinated by machine learning applications in finance', or 'I enjoy solving complex logistical problems.'"
+                    placeholder={t("e.g., 'I love building beautiful user interfaces', 'I'm fascinated by machine learning applications in finance', or 'I enjoy solving complex logistical problems.'")}
                     className="w-full h-28 bg-slate-900 border border-slate-700 rounded-lg p-3 text-slate-200 placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-violet-500 focus:border-violet-500 transition"
                     disabled={isLoading}
                     />
@@ -622,7 +631,7 @@ export default function Planner() {
                     id="goals"
                     value={goals}
                     onChange={(e) => setGoals(e.target.value)}
-                    placeholder="e.g., 'Become a Senior Product Manager in 5 years' or 'Transition into data science focusing on renewable energy.'"
+                    placeholder={t("e.g., 'Become a Senior Product Manager in 5 years' or 'Transition into data science focusing on renewable energy.'")}
                     className="w-full bg-slate-900 border border-slate-700 rounded-lg p-3 text-slate-200 placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-violet-500 focus:border-violet-500 transition"
                     disabled={isLoading}
                     />
@@ -635,7 +644,7 @@ export default function Planner() {
                     disabled={isLoading}
                     className="w-full text-lg font-semibold bg-gradient-to-r from-violet-600 to-fuchsia-600 text-white py-3 px-6 rounded-lg hover:from-violet-500 hover:to-fuchsia-500 disabled:from-slate-700 disabled:to-slate-700 disabled:text-slate-400 disabled:cursor-not-allowed focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-950 focus-visible:ring-violet-500 transition-all duration-300 flex items-center justify-center gap-2 shadow-lg shadow-violet-900/50 hover:shadow-xl hover:shadow-violet-800/60 transform hover:-translate-y-0.5"
                 >
-                    {loading.plan ? 'Generating Plan...' : 'Create Roadmap'}
+                    {loading.plan ? t('Generating Plan...') : t('Create Roadmap')}
                 </button>
                 <button 
                     onClick={handleExplorePaths}
@@ -643,7 +652,7 @@ export default function Planner() {
                     className="w-full text-lg font-semibold bg-slate-800/80 text-white py-3 px-6 rounded-lg border border-slate-700 hover:bg-slate-700/80 disabled:bg-slate-800 disabled:text-slate-400 disabled:cursor-not-allowed focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-950 focus-visible:ring-violet-500 transition-all duration-300 flex items-center justify-center gap-2"
                 >
                     <SparklesIcon className="w-5 h-5" />
-                    {loading.explorer ? 'Exploring...' : 'Explore Paths'}
+                    {loading.explorer ? t('Exploring...') : t('Explore Paths')}
                 </button>
                 </div>
             </div>
@@ -651,7 +660,7 @@ export default function Planner() {
           
           {showTabs && (
             <div className="mt-12 flex justify-center border-b border-slate-800 animate-fade-in">
-                <button 
+                <button
                     onClick={() => setView('planner')}
                     className={`px-6 py-2 text-lg font-medium transition-colors disabled:text-slate-600 disabled:cursor-not-allowed ${view === 'planner' ? 'text-violet-400 border-b-2 border-violet-400' : 'text-slate-400 hover:text-white'}`}
                     disabled={!careerPlan}
@@ -670,8 +679,8 @@ export default function Planner() {
             </div>
           )}
 
-          {loading.plan && <LoadingSpinner text="Generating Your Detailed Plan..." />}
-          {loading.explorer && <LoadingSpinner text="Exploring Related Career Paths..." />}
+          {loading.plan && <LoadingSpinner text={t('Generating Your Detailed Plan...')} />}
+          {loading.explorer && <LoadingSpinner text={t('Exploring Related Career Paths...')} />}
           {error && <ErrorDisplay message={error} />}
 
           {view === 'planner' && careerPlan && <CareerPlanDisplay plan={careerPlan} />}
